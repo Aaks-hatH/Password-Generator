@@ -25,7 +25,7 @@ This is **archived code** from an older repository that is no longer maintained.
 -  **Fully Responsive** - Works perfectly on mobile and desktop
 -  **Modern UI** - Clean, beautiful gradient design
 
-##  Quick Start
+##  Start
 
 ### Online Use
 Simply visit the [live demo](https://aaks-hath.github.io/password-generator/) and start generating passwords!
@@ -35,13 +35,13 @@ Simply visit the [live demo](https://aaks-hath.github.io/password-generator/) an
 2. Open it in any modern web browser
 3. No installation or setup required!
 
-## 🛠️ Technology
+##  Tech
 
 - **Pure HTML/CSS/JavaScript** - No dependencies or frameworks
 - **Client-Side Only** - All processing happens in your browser
 - **No Data Collection** - Your passwords are never sent to any server
 
-## 📖 How to Use
+##  Usage
 
 1. **Adjust Length** - Use the slider to set your desired password length
 2. **Select Character Types** - Check/uncheck options for:
