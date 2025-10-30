@@ -13,7 +13,7 @@ This is **archived code** from an older repository that is no longer maintained.
 
 ##  Live Demo
 
-**[Try it here →](https://aaks-hath.github.io/password-generator/)**
+**[Try it here →](https://aaks-hath.github.io/Password-Generator/)**
 
 ##  Features
 
@@ -28,7 +28,7 @@ This is **archived code** from an older repository that is no longer maintained.
 ##  Start
 
 ### Online Use
-Simply visit the [live demo](https://aaks-hath.github.io/password-generator/) and start generating passwords!
+Simply visit the [live demo](https://aaks-hath.github.io/Password-Generator/) and start generating passwords!
 
 ### Local Use
 1. Download the `index.html` file
