@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Password Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Password Generator</title>
   <style>
     * {
       margin: 0;
@@ -324,16 +324,14 @@
 </head>
 <body>
   <div class="container">
-    <h1> Password Generator</h1>
+    <h1>Password Generator</h1>
     <p class="subtitle">Create strong, secure passwords instantly</p>
 
-    
     <div class="password-display">
       <div class="password-text empty" id="passwordText">Generate a password</div>
       <button class="copy-btn" id="copyBtn">Copy</button>
     </div>
 
-    
     <div class="strength-meter">
       <div class="strength-label">
         <span>Password Strength:</span>
@@ -344,47 +342,42 @@
       </div>
     </div>
 
-   
     <div class="settings">
-      
       <div class="setting-group">
         <div class="setting-label">
           <span>Password Length</span>
           <span class="length-value" id="lengthValue">16</span>
         </div>
-        <input type="range" id="lengthSlider" min="6" max="32" value="16">
+        <input type="range" id="lengthSlider" min="6" max="32" value="16" />
       </div>
 
-      
       <div class="setting-group">
         <div class="setting-label">
           <span>Include Characters</span>
         </div>
         <div class="checkbox-group">
           <div class="checkbox-item">
-            <input type="checkbox" id="uppercase" checked>
+            <input type="checkbox" id="uppercase" checked />
             <label for="uppercase">Uppercase (A-Z)</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="lowercase" checked>
+            <input type="checkbox" id="lowercase" checked />
             <label for="lowercase">Lowercase (a-z)</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="numbers" checked>
+            <input type="checkbox" id="numbers" checked />
             <label for="numbers">Numbers (0-9)</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="symbols" checked>
+            <input type="checkbox" id="symbols" checked />
             <label for="symbols">Symbols (!@#$%^&*)</label>
           </div>
         </div>
       </div>
     </div>
 
-    
     <button class="generate-btn" id="generateBtn">Generate Password</button>
 
-    
     <div class="history">
       <div class="history-title">Recent Passwords</div>
       <div class="history-list" id="historyList">
@@ -395,167 +388,160 @@
   </div>
 
   <script>
-    const passwordText = document.getElementById('passwordText');
-    const copyBtn = document.getElementById('copyBtn');
-    const lengthSlider = document.getElementById('lengthSlider');
-    const lengthValue = document.getElementById('lengthValue');
-    const generateBtn = document.getElementById('generateBtn');
-    const strengthText = document.getElementById('strengthText');
-    const strengthFill = document.getElementById('strengthFill');
-    const historyList = document.getElementById('historyList');
-    const clearHistoryBtn = document.getElementById('clearHistory');
+    // Collecting UI references
+    const pwdDisplay = document.getElementById('passwordText');
+    const btnCopy = document.getElementById('copyBtn');
+    const sliderLength = document.getElementById('lengthSlider');
+    const lblLength = document.getElementById('lengthValue');
+    const btnGenerate = document.getElementById('generateBtn');
+    const txtStrength = document.getElementById('strengthText');
+    const barStrength = document.getElementById('strengthFill');
+    const historyContainer = document.getElementById('historyList');
+    const btnClearHistory = document.getElementById('clearHistory');
 
-    const uppercase = document.getElementById('uppercase');
-    const lowercase = document.getElementById('lowercase');
-    const numbers = document.getElementById('numbers');
-    const symbols = document.getElementById('symbols');
+    const chkUpper = document.getElementById('uppercase');
+    const chkLower = document.getElementById('lowercase');
+    const chkNums = document.getElementById('numbers');
+    const chkSymbols = document.getElementById('symbols');
 
-    let passwordHistory = [];
+    let pastPwds = [];
 
-  
-    const charSets = {
-      uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      lowercase: 'abcdefghijklmnopqrstuvwxyz',
-      numbers: '0123456789',
+    const chars = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      nums: '0123456789',
       symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
     };
 
-    
-    lengthSlider.addEventListener('input', (e) => {
-      lengthValue.textContent = e.target.value;
+    sliderLength.addEventListener('input', e => {
+      lblLength.textContent = e.target.value;
     });
 
-    function generatePassword() {
-      const length = parseInt(lengthSlider.value);
-      let charset = '';
-      
-      if (uppercase.checked) charset += charSets.uppercase;
-      if (lowercase.checked) charset += charSets.lowercase;
-      if (numbers.checked) charset += charSets.numbers;
-      if (symbols.checked) charset += charSets.symbols;
+    function makePassword() {
+      const len = parseInt(sliderLength.value, 10);
+      let available = '';
 
-      if (charset === '') {
-        alert('Please select at least one character type!');
+      if (chkUpper.checked) available += chars.upper;
+      if (chkLower.checked) available += chars.lower;
+      if (chkNums.checked) available += chars.nums;
+      if (chkSymbols.checked) available += chars.symbols;
+
+      if (!available) {
+        alert('Select at least one character type!');
         return;
       }
 
-      let password = '';
-      for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * charset.length);
-        password += charset[randomIndex];
+      let pwd = '';
+      for (let i = 0; i < len; i++) {
+        const idx = Math.floor(Math.random() * available.length);
+        pwd += available.charAt(idx);
       }
 
-      displayPassword(password);
-      calculateStrength(password);
-      addToHistory(password);
+      showPassword(pwd);
+      checkStrength(pwd);
+      savePassword(pwd);
     }
 
-    
-    function displayPassword(password) {
-      passwordText.textContent = password;
-      passwordText.classList.remove('empty');
+    function showPassword(pwd) {
+      pwdDisplay.textContent = pwd;
+      pwdDisplay.classList.remove('empty');
     }
 
-    
-    function calculateStrength(password) {
-      let strength = 0;
-      
-      if (password.length >= 8) strength++;
-      if (password.length >= 12) strength++;
-      if (password.length >= 16) strength++;
-      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-      if (/[0-9]/.test(password)) strength++;
-      if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    function checkStrength(pwd) {
+      let score = 0;
+      if (pwd.length > 7) score++;
+      if (pwd.length > 11) score++;
+      if (pwd.length > 15) score++;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
+      if (/[0-9]/.test(pwd)) score++;
+      if (/[^a-zA-Z0-9]/.test(pwd)) score++;
 
-      strengthFill.className = 'strength-fill';
-      
-      if (strength <= 2) {
-        strengthFill.classList.add('strength-weak');
-        strengthText.textContent = 'Weak';
-        strengthText.style.color = '#f56565';
-      } else if (strength <= 4) {
-        strengthFill.classList.add('strength-fair');
-        strengthText.textContent = 'Fair';
-        strengthText.style.color = '#ed8936';
-      } else if (strength <= 5) {
-        strengthFill.classList.add('strength-good');
-        strengthText.textContent = 'Good';
-        strengthText.style.color = '#ecc94b';
+      barStrength.className = 'strength-fill';
+
+      if (score <= 2) {
+        barStrength.classList.add('strength-weak');
+        txtStrength.textContent = 'Weak';
+        txtStrength.style.color = '#f56565';
+      } else if (score <= 4) {
+        barStrength.classList.add('strength-fair');
+        txtStrength.textContent = 'Fair';
+        txtStrength.style.color = '#ed8936';
+      } else if (score <= 5) {
+        barStrength.classList.add('strength-good');
+        txtStrength.textContent = 'Good';
+        txtStrength.style.color = '#ecc94b';
       } else {
-        strengthFill.classList.add('strength-strong');
-        strengthText.textContent = 'Strong';
-        strengthText.style.color = '#48bb78';
+        barStrength.classList.add('strength-strong');
+        txtStrength.textContent = 'Strong';
+        txtStrength.style.color = '#48bb78';
       }
     }
 
-    
-    function copyPassword() {
-      const password = passwordText.textContent;
-      if (password === 'Generate a password') {
+    function copyPwd() {
+      const pwd = pwdDisplay.textContent;
+      if (pwd === 'Generate a password' || !pwd) {
         alert('Generate a password first!');
         return;
       }
 
-      navigator.clipboard.writeText(password).then(() => {
-        copyBtn.textContent = 'Copied!';
-        copyBtn.classList.add('copied');
-        
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy';
-          copyBtn.classList.remove('copied');
-        }, 2000);
-      }).catch(() => {
-        alert('Failed to copy password');
-      });
+      navigator.clipboard.writeText(pwd)
+        .then(() => {
+          btnCopy.textContent = 'Copied!';
+          btnCopy.classList.add('copied');
+          setTimeout(() => {
+            btnCopy.textContent = 'Copy';
+            btnCopy.classList.remove('copied');
+          }, 1800);
+        })
+        .catch(() => {
+          alert('Could not copy to clipboard.');
+        });
     }
 
-    function addToHistory(password) {
-      passwordHistory.unshift(password);
-      if (passwordHistory.length > 5) {
-        passwordHistory = passwordHistory.slice(0, 5);
+    function savePassword(pwd) {
+      pastPwds.unshift(pwd);
+      if (pastPwds.length > 5) {
+        pastPwds = pastPwds.slice(0, 5);
       }
-      renderHistory();
+      drawHistory();
     }
 
-    
-    function renderHistory() {
-      if (passwordHistory.length === 0) {
-        historyList.innerHTML = '<div class="empty-history">No passwords generated yet</div>';
-        clearHistoryBtn.style.display = 'none';
+    function drawHistory() {
+      if (pastPwds.length === 0) {
+        historyContainer.innerHTML = '<div class="empty-history">No passwords yet</div>';
+        btnClearHistory.style.display = 'none';
         return;
       }
 
-      historyList.innerHTML = passwordHistory.map(pwd => `
-        <div class="history-item">
-          <span>${pwd}</span>
-          <button onclick="copyFromHistory('${pwd}')">Copy</button>
-        </div>
-      `).join('');
-      
-      clearHistoryBtn.style.display = 'block';
+      historyContainer.innerHTML = pastPwds.map(p => {
+        return `
+          <div class="history-item">
+            <span>${p}</span>
+            <button onclick="copyOldPwd('${p}')">Copy</button>
+          </div>
+        `;
+      }).join('');
+
+      btnClearHistory.style.display = 'block';
     }
 
-    
-    window.copyFromHistory = function(password) {
-      navigator.clipboard.writeText(password).then(() => {
-        alert('Password copied!');
+    window.copyOldPwd = function(p) {
+      navigator.clipboard.writeText(p).then(() => {
+        alert('Copied from history.');
       });
-    }
+    };
 
-    
-    clearHistoryBtn.addEventListener('click', () => {
-      if (confirm('Clear password history?')) {
-        passwordHistory = [];
-        renderHistory();
+    btnClearHistory.addEventListener('click', () => {
+      if (confirm('Clear all password history?')) {
+        pastPwds = [];
+        drawHistory();
       }
     });
 
-    
-    generateBtn.addEventListener('click', generatePassword);
-    copyBtn.addEventListener('click', copyPassword);
+    btnGenerate.addEventListener('click', makePassword);
+    btnCopy.addEventListener('click', copyPwd);
 
-    
-    window.addEventListener('DOMContentLoaded', generatePassword);
+    window.addEventListener('DOMContentLoaded', makePassword);
   </script>
 </body>
 </html>
