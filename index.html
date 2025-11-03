@@ -327,13 +327,13 @@
     <h1> Password Generator</h1>
     <p class="subtitle">Create strong, secure passwords instantly</p>
 
-    <!-- Password Display -->
+    
     <div class="password-display">
       <div class="password-text empty" id="passwordText">Generate a password</div>
       <button class="copy-btn" id="copyBtn">Copy</button>
     </div>
 
-    <!-- Strength Meter -->
+    
     <div class="strength-meter">
       <div class="strength-label">
         <span>Password Strength:</span>
@@ -344,9 +344,9 @@
       </div>
     </div>
 
-    <!-- Settings -->
+   
     <div class="settings">
-      <!-- Length Slider -->
+      
       <div class="setting-group">
         <div class="setting-label">
           <span>Password Length</span>
@@ -355,7 +355,7 @@
         <input type="range" id="lengthSlider" min="6" max="32" value="16">
       </div>
 
-      <!-- Character Options -->
+      
       <div class="setting-group">
         <div class="setting-label">
           <span>Include Characters</span>
@@ -381,10 +381,10 @@
       </div>
     </div>
 
-    <!-- Generate Button -->
+    
     <button class="generate-btn" id="generateBtn">Generate Password</button>
 
-    <!-- History -->
+    
     <div class="history">
       <div class="history-title">Recent Passwords</div>
       <div class="history-list" id="historyList">
@@ -412,7 +412,7 @@
 
     let passwordHistory = [];
 
-    // Character sets
+  
     const charSets = {
       uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       lowercase: 'abcdefghijklmnopqrstuvwxyz',
@@ -420,12 +420,11 @@
       symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
     };
 
-    // Update length display
+    
     lengthSlider.addEventListener('input', (e) => {
       lengthValue.textContent = e.target.value;
     });
 
-    // Generate password
     function generatePassword() {
       const length = parseInt(lengthSlider.value);
       let charset = '';
@@ -451,13 +450,13 @@
       addToHistory(password);
     }
 
-    // Display password
+    
     function displayPassword(password) {
       passwordText.textContent = password;
       passwordText.classList.remove('empty');
     }
 
-    // Calculate password strength
+    
     function calculateStrength(password) {
       let strength = 0;
       
@@ -489,7 +488,7 @@
       }
     }
 
-    // Copy to clipboard
+    
     function copyPassword() {
       const password = passwordText.textContent;
       if (password === 'Generate a password') {
@@ -510,7 +509,6 @@
       });
     }
 
-    // Add to history
     function addToHistory(password) {
       passwordHistory.unshift(password);
       if (passwordHistory.length > 5) {
@@ -519,7 +517,7 @@
       renderHistory();
     }
 
-    // Render history
+    
     function renderHistory() {
       if (passwordHistory.length === 0) {
         historyList.innerHTML = '<div class="empty-history">No passwords generated yet</div>';
@@ -537,14 +535,14 @@
       clearHistoryBtn.style.display = 'block';
     }
 
-    // Copy from history
+    
     window.copyFromHistory = function(password) {
       navigator.clipboard.writeText(password).then(() => {
         alert('Password copied!');
       });
     }
 
-    // Clear history
+    
     clearHistoryBtn.addEventListener('click', () => {
       if (confirm('Clear password history?')) {
         passwordHistory = [];
@@ -552,11 +550,11 @@
       }
     });
 
-    // Event listeners
+    
     generateBtn.addEventListener('click', generatePassword);
     copyBtn.addEventListener('click', copyPassword);
 
-    // Generate initial password on load
+    
     window.addEventListener('DOMContentLoaded', generatePassword);
   </script>
 </body>
