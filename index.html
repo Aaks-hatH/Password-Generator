@@ -44,6 +44,45 @@
       font-size: 0.9rem;
     }
 
+    .link-banner {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .link-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+    }
+
+    .link-content {
+      flex: 1;
+    }
+
+    .link-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .link-desc {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .link-arrow {
+      font-size: 1.5rem;
+      opacity: 0.8;
+    }
+
     .password-display {
       background: #f7f9fc;
       border: 2px solid #e1e8ed;
@@ -237,6 +276,30 @@
       transform: translateY(0);
     }
 
+    .check-password-btn {
+      width: 100%;
+      background: #1e3c72;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .check-password-btn:hover {
+      background: #2a5298;
+      transform: translateY(-2px);
+    }
+
+    .check-password-btn.show {
+      display: block;
+    }
+
     .history {
       margin-top: 30px;
       padding-top: 25px;
@@ -319,6 +382,11 @@
       .password-text {
         font-size: 1rem;
       }
+
+      .link-banner {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -326,6 +394,14 @@
   <div class="container">
     <h1>Password Generator</h1>
     <p class="subtitle">Create strong, secure passwords instantly</p>
+
+    <a href="https://aaks-hath.github.io/Password-Checker/" class="link-banner">
+      <div class="link-content">
+        <div class="link-title">🔍 Check Password Strength</div>
+        <div class="link-desc">Analyze your password security</div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
 
     <div class="password-display">
       <div class="password-text empty" id="passwordText">Generate a password</div>
@@ -377,6 +453,7 @@
     </div>
 
     <button class="generate-btn" id="generateBtn">Generate Password</button>
+    <button class="check-password-btn" id="checkBtn">📊 Check This Password's Strength</button>
 
     <div class="history">
       <div class="history-title">Recent Passwords</div>
@@ -388,7 +465,6 @@
   </div>
 
   <script>
-    // Collecting UI references
     const pwdDisplay = document.getElementById('passwordText');
     const btnCopy = document.getElementById('copyBtn');
     const sliderLength = document.getElementById('lengthSlider');
@@ -398,6 +474,7 @@
     const barStrength = document.getElementById('strengthFill');
     const historyContainer = document.getElementById('historyList');
     const btnClearHistory = document.getElementById('clearHistory');
+    const btnCheck = document.getElementById('checkBtn');
 
     const chkUpper = document.getElementById('uppercase');
     const chkLower = document.getElementById('lowercase');
@@ -440,6 +517,7 @@
       showPassword(pwd);
       checkStrength(pwd);
       savePassword(pwd);
+      btnCheck.classList.add('show');
     }
 
     function showPassword(pwd) {
@@ -535,6 +613,13 @@
       if (confirm('Clear all password history?')) {
         pastPwds = [];
         drawHistory();
+      }
+    });
+
+    btnCheck.addEventListener('click', () => {
+      const pwd = pwdDisplay.textContent;
+      if (pwd && pwd !== 'Generate a password') {
+        window.open('https://aaks-hath.github.io/Password-Checker/', '_blank');
       }
     });
 
