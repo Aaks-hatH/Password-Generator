@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Password Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     * {
       margin: 0;
@@ -11,56 +15,131 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --bg-tertiary: #e5e5e5;
+      --accent-primary: #000000;
+      --accent-secondary: #333333;
+      --accent-gradient: linear-gradient(135deg, #000000 0%, #333333 100%);
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --text-muted: #999999;
+      --success: #000000;
+      --warning: #333333;
+      --danger: #000000;
+      --glass-bg: rgba(0, 0, 0, 0.02);
+      --glass-border: rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #000000 0%, #000000 100%);
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,0,0,.02) 35px, rgba(0,0,0,.02) 70px);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      color: var(--text-primary);
+      overflow-x: hidden;
     }
 
     .container {
-      background: white;
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 500px;
       width: 100%;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 1400px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 30px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel {
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 0;
+      padding: 40px;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 1);
+      transition: all 0.3s ease;
+    }
+
+    .panel:hover {
+      box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+      transform: translate(-2px, -2px);
+    }
+
+    /* LEFT PANEL - Settings */
+    .settings-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
     }
 
     h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -2px;
     }
 
     .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 300;
     }
 
     .link-banner {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
-      padding: 15px 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
+      background: var(--accent-primary);
+      border: 2px solid var(--accent-primary);
+      color: var(--bg-primary);
+      padding: 20px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
       text-decoration: none;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .link-banner:hover::before {
+      left: 100%;
     }
 
     .link-banner:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
     }
 
     .link-content {
@@ -68,168 +147,102 @@
     }
 
     .link-title {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       margin-bottom: 4px;
+      color: var(--bg-primary);
     }
 
     .link-desc {
       font-size: 0.85rem;
-      opacity: 0.9;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .link-arrow {
       font-size: 1.5rem;
-      opacity: 0.8;
+      color: var(--bg-primary);
+      transition: transform 0.3s ease;
     }
 
-    .password-display {
-      background: #f7f9fc;
-      border: 2px solid #e1e8ed;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 25px;
-      position: relative;
-      min-height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .password-text {
-      font-family: 'Courier New', monospace;
-      font-size: 1.2rem;
-      color: #333;
-      word-break: break-all;
-      flex: 1;
-      user-select: all;
-    }
-
-    .password-text.empty {
-      color: #999;
-      font-style: italic;
-    }
-
-    .copy-btn {
-      background: #000000;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-      white-space: nowrap;
-    }
-
-    .copy-btn:hover {
-      background: #5568d3;
-      transform: translateY(-2px);
-    }
-
-    .copy-btn:active {
-      transform: translateY(0);
-    }
-
-    .copy-btn.copied {
-      background: #48bb78;
-    }
-
-    .strength-meter {
-      margin-bottom: 25px;
-    }
-
-    .strength-label {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .strength-text {
-      font-weight: 600;
-    }
-
-    .strength-bar {
-      height: 8px;
-      background: #e1e8ed;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .strength-fill {
-      height: 100%;
-      width: 0%;
-      transition: all 0.3s;
-      border-radius: 10px;
-    }
-
-    .strength-weak { background: #f56565; width: 25%; }
-    .strength-fair { background: #ed8936; width: 50%; }
-    .strength-good { background: #ecc94b; width: 75%; }
-    .strength-strong { background: #48bb78; width: 100%; }
-
-    .settings {
-      margin-bottom: 25px;
+    .link-banner:hover .link-arrow {
+      transform: translateX(5px);
     }
 
     .setting-group {
-      margin-bottom: 20px;
+      animation: slideIn 0.5s ease-out backwards;
+    }
+
+    .setting-group:nth-child(1) { animation-delay: 0.1s; }
+    .setting-group:nth-child(2) { animation-delay: 0.2s; }
+    .setting-group:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .setting-label {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       font-size: 0.95rem;
-      color: #333;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
     .length-value {
-      color: #667eea;
-      font-weight: 600;
+      color: var(--accent-primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     input[type="range"] {
       width: 100%;
-      height: 6px;
-      border-radius: 5px;
-      background: #e1e8ed;
+      height: 8px;
+      border-radius: 0;
+      background: var(--bg-tertiary);
       outline: none;
       -webkit-appearance: none;
+      position: relative;
+      border: 1px solid var(--accent-primary);
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #667eea;
+      width: 24px;
+      height: 24px;
+      border-radius: 0;
+      background: var(--accent-primary);
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
+      border: 2px solid var(--accent-primary);
     }
 
     input[type="range"]::-webkit-slider-thumb:hover {
       transform: scale(1.2);
-      background: #5568d3;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
     }
 
     input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #667eea;
+      width: 24px;
+      height: 24px;
+      border-radius: 0;
+      background: var(--accent-primary);
       cursor: pointer;
-      border: none;
+      border: 2px solid var(--accent-primary);
     }
 
     .checkbox-group {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
@@ -238,149 +251,413 @@
       align-items: center;
       gap: 10px;
       cursor: pointer;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 0;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-item:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-primary);
+      transform: translateX(2px);
     }
 
     .checkbox-item input[type="checkbox"] {
       width: 20px;
       height: 20px;
       cursor: pointer;
-      accent-color: #667eea;
+      accent-color: var(--accent-primary);
+      border-radius: 0;
     }
 
     .checkbox-item label {
       cursor: pointer;
-      font-size: 0.95rem;
-      color: #333;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label {
+      color: var(--text-primary);
+      font-weight: 500;
     }
 
     .generate-btn {
       width: 100%;
-      background: linear-gradient(135deg, #000000 0%, #000000 100%);
+      background: var(--accent-primary);
       color: white;
       border: none;
-      padding: 16px;
-      border-radius: 12px;
+      padding: 18px;
+      border-radius: 0;
       font-size: 1.1rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s ease;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .generate-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 0;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .generate-btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
     }
 
     .generate-btn:active {
-      transform: translateY(0);
+      transform: translate(0, 0);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     }
+
+    .generate-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* RIGHT PANEL - Output */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .password-display {
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 0;
+      padding: 30px;
+      position: relative;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .password-display:hover {
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+      transform: translate(-2px, -2px);
+    }
+
+    .password-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .password-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      border: 2px solid var(--accent-primary);
+      padding: 10px 20px;
+      border-radius: 0;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: var(--bg-primary);
+      color: var(--accent-primary);
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .copy-btn:active {
+      transform: translate(0, 0);
+      box-shadow: none;
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .password-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      word-break: break-all;
+      user-select: all;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .password-text.empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.2rem;
+    }
+
+    .strength-meter {
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 0;
+      padding: 25px;
+    }
+
+    .strength-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .strength-text {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .strength-bar {
+      height: 12px;
+      background: var(--bg-tertiary);
+      border-radius: 0;
+      border: 1px solid var(--accent-primary);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .strength-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.1) 10px,
+        rgba(255, 255, 255, 0.1) 20px
+      );
+      animation: shimmer 2s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .strength-weak { background: #000000; width: 25%; }
+    .strength-fair { background: #333333; width: 50%; }
+    .strength-good { background: #666666; width: 75%; }
+    .strength-strong { background: #000000; width: 100%; }
 
     .check-password-btn {
       width: 100%;
-      background: #1e3c72;
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
+      background: var(--bg-primary);
+      color: var(--accent-primary);
+      border: 2px solid var(--accent-primary);
+      padding: 16px;
+      border-radius: 0;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 15px;
+      transition: all 0.3s ease;
       display: none;
     }
 
     .check-password-btn:hover {
-      background: #2a5298;
-      transform: translateY(-2px);
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     }
 
     .check-password-btn.show {
       display: block;
+      animation: fadeIn 0.4s ease-out;
     }
 
     .history {
-      margin-top: 30px;
-      padding-top: 25px;
-      border-top: 2px solid #e1e8ed;
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 0;
+      padding: 25px;
+      max-height: 400px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .history-title {
       font-size: 1rem;
-      color: #333;
+      color: var(--text-secondary);
       margin-bottom: 15px;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .history-list {
-      max-height: 200px;
+      flex: 1;
       overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .history-list::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 0;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--accent-primary);
+      border-radius: 0;
+    }
+
+    .history-list::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-secondary);
     }
 
     .history-item {
-      background: #f7f9fc;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      background: var(--bg-tertiary);
+      padding: 14px;
+      border-radius: 0;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
       word-break: break-all;
+      transition: all 0.3s ease;
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .history-item:hover {
+      background: var(--bg-primary);
+      border-color: var(--accent-primary);
+      transform: translateX(-5px);
     }
 
     .history-item button {
-      background: #000000;
-      color: white;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
       border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 8px 14px;
+      border-radius: 0;
       cursor: pointer;
       font-size: 0.8rem;
+      font-weight: 600;
       white-space: nowrap;
       margin-left: 10px;
+      transition: all 0.3s ease;
     }
 
     .history-item button:hover {
-      background: #5568d3;
+      background: var(--accent-secondary);
+      color: white;
+      transform: scale(1.05);
     }
 
     .clear-history {
       width: 100%;
-      background: #e1e8ed;
-      color: #666;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      border: 1px solid var(--glass-border);
+      padding: 12px;
+      border-radius: 0;
       cursor: pointer;
-      margin-top: 10px;
       font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
 
     .clear-history:hover {
-      background: #d1d8dd;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      border-color: var(--accent-primary);
     }
 
     .empty-history {
       text-align: center;
-      color: #999;
+      color: var(--text-muted);
       font-style: italic;
-      padding: 20px;
+      padding: 30px;
+    }
+
+    @media (max-width: 1200px) {
+      .container {
+        grid-template-columns: 1fr;
+        max-width: 700px;
+      }
+
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 600px) {
-      .container {
+      .panel {
         padding: 25px;
       }
 
       h1 {
-        font-size: 1.5rem;
+        font-size: 2rem;
       }
 
       .password-text {
-        font-size: 1rem;
+        font-size: 1.2rem;
       }
 
       .link-banner {
@@ -392,36 +669,24 @@
 </head>
 <body>
   <div class="container">
-    <h1>Password Generator</h1>
-    <p class="subtitle">Create strong, secure passwords instantly</p>
-
-    <a href="https://aaks-hath.github.io/Password-Checker/" class="link-banner">
-      <div class="link-content">
-        <div class="link-title"> Check Password Strength</div>
-        <div class="link-desc">Analyze your password security</div>
+    <!-- LEFT PANEL: Settings -->
+    <div class="panel settings-panel">
+      <div class="header">
+        <h1>Password<br>Generator</h1>
+        <p class="subtitle">Create ultra-secure passwords instantly</p>
       </div>
-      <div class="link-arrow">→</div>
-    </a>
 
-    <div class="password-display">
-      <div class="password-text empty" id="passwordText">Generate a password</div>
-      <button class="copy-btn" id="copyBtn">Copy</button>
-    </div>
+      <a href="https://aaks-hath.github.io/Password-Checker/" class="link-banner">
+        <div class="link-content">
+          <div class="link-title"><i data-lucide="shield-check" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i> Check Password Strength</div>
+          <div class="link-desc">Analyze your password security</div>
+        </div>
+        <div class="link-arrow"><i data-lucide="arrow-right"></i></div>
+      </a>
 
-    <div class="strength-meter">
-      <div class="strength-label">
-        <span>Password Strength:</span>
-        <span class="strength-text" id="strengthText">-</span>
-      </div>
-      <div class="strength-bar">
-        <div class="strength-fill" id="strengthFill"></div>
-      </div>
-    </div>
-
-    <div class="settings">
       <div class="setting-group">
         <div class="setting-label">
-          <span>Password Length</span>
+          <span><i data-lucide="ruler" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Password Length</span>
           <span class="length-value" id="lengthValue">16</span>
         </div>
         <input type="range" id="lengthSlider" min="6" max="32" value="16" />
@@ -429,38 +694,62 @@
 
       <div class="setting-group">
         <div class="setting-label">
-          <span>Include Characters</span>
+          <span><i data-lucide="type" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Character Types</span>
         </div>
         <div class="checkbox-group">
           <div class="checkbox-item">
             <input type="checkbox" id="uppercase" checked />
-            <label for="uppercase">Uppercase (A-Z)</label>
+            <label for="uppercase"><i data-lucide="a-arrow-up" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Uppercase (A-Z)</label>
           </div>
           <div class="checkbox-item">
             <input type="checkbox" id="lowercase" checked />
-            <label for="lowercase">Lowercase (a-z)</label>
+            <label for="lowercase"><i data-lucide="a-arrow-down" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Lowercase (a-z)</label>
           </div>
           <div class="checkbox-item">
             <input type="checkbox" id="numbers" checked />
-            <label for="numbers">Numbers (0-9)</label>
+            <label for="numbers"><i data-lucide="hash" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Numbers (0-9)</label>
           </div>
           <div class="checkbox-item">
             <input type="checkbox" id="symbols" checked />
-            <label for="symbols">Symbols (!@#$%^&*)</label>
+            <label for="symbols"><i data-lucide="asterisk" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Symbols (!@#$%)</label>
           </div>
         </div>
       </div>
+
+      <button class="generate-btn" id="generateBtn">
+        <span><i data-lucide="refresh-cw" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Generate Password</span>
+      </button>
     </div>
 
-    <button class="generate-btn" id="generateBtn">Generate Password</button>
-    <button class="check-password-btn" id="checkBtn"> Check This Password's Strength</button>
-
-    <div class="history">
-      <div class="history-title">Recent Passwords</div>
-      <div class="history-list" id="historyList">
-        <div class="empty-history">No passwords generated yet</div>
+    <!-- RIGHT PANEL: Output -->
+    <div class="panel output-panel">
+      <div class="password-display">
+        <div class="password-header">
+          <div class="password-label"><i data-lucide="key" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Your Password</div>
+          <button class="copy-btn" id="copyBtn"><i data-lucide="copy" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Copy</button>
+        </div>
+        <div class="password-text empty" id="passwordText">Click generate to create a password</div>
       </div>
-      <button class="clear-history" id="clearHistory" style="display: none;">Clear History</button>
+
+      <div class="strength-meter">
+        <div class="strength-label">
+          <span><i data-lucide="shield" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Security Strength</span>
+          <span class="strength-text" id="strengthText">-</span>
+        </div>
+        <div class="strength-bar">
+          <div class="strength-fill" id="strengthFill"></div>
+        </div>
+      </div>
+
+      <button class="check-password-btn" id="checkBtn"><i data-lucide="external-link" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Analyze This Password</button>
+
+      <div class="history">
+        <div class="history-title"><i data-lucide="clock" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Recent Passwords</div>
+        <div class="history-list" id="historyList">
+          <div class="empty-history">No passwords generated yet</div>
+        </div>
+        <button class="clear-history" id="clearHistory" style="display: none;"><i data-lucide="trash-2" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Clear History</button>
+      </div>
     </div>
   </div>
 
@@ -539,36 +828,38 @@
       if (score <= 2) {
         barStrength.classList.add('strength-weak');
         txtStrength.textContent = 'Weak';
-        txtStrength.style.color = '#f56565';
+        txtStrength.style.color = '#000000';
       } else if (score <= 4) {
         barStrength.classList.add('strength-fair');
         txtStrength.textContent = 'Fair';
-        txtStrength.style.color = '#ed8936';
+        txtStrength.style.color = '#333333';
       } else if (score <= 5) {
         barStrength.classList.add('strength-good');
         txtStrength.textContent = 'Good';
-        txtStrength.style.color = '#ecc94b';
+        txtStrength.style.color = '#666666';
       } else {
         barStrength.classList.add('strength-strong');
         txtStrength.textContent = 'Strong';
-        txtStrength.style.color = '#48bb78';
+        txtStrength.style.color = '#000000';
       }
     }
 
     function copyPwd() {
       const pwd = pwdDisplay.textContent;
-      if (pwd === 'Generate a password' || !pwd) {
+      if (pwd === 'Click generate to create a password' || !pwd) {
         alert('Generate a password first!');
         return;
       }
 
       navigator.clipboard.writeText(pwd)
         .then(() => {
-          btnCopy.textContent = 'Copied!';
+          btnCopy.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Copied!';
           btnCopy.classList.add('copied');
+          lucide.createIcons();
           setTimeout(() => {
-            btnCopy.textContent = 'Copy';
+            btnCopy.innerHTML = '<i data-lucide="copy" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Copy';
             btnCopy.classList.remove('copied');
+            lucide.createIcons();
           }, 1800);
         })
         .catch(() => {
@@ -595,17 +886,24 @@
         return `
           <div class="history-item">
             <span>${p}</span>
-            <button onclick="copyOldPwd('${p}')">Copy</button>
+            <button onclick="copyOldPwd('${p}', event)"><i data-lucide="copy" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i></button>
           </div>
         `;
       }).join('');
 
       btnClearHistory.style.display = 'block';
+      lucide.createIcons();
     }
 
-    window.copyOldPwd = function(p) {
+    window.copyOldPwd = function(p, event) {
       navigator.clipboard.writeText(p).then(() => {
-        alert('Copied from history.');
+        const btn = event.target.closest('button');
+        btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>';
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.innerHTML = '<i data-lucide="copy" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>';
+          lucide.createIcons();
+        }, 1000);
       });
     };
 
@@ -618,7 +916,7 @@
 
     btnCheck.addEventListener('click', () => {
       const pwd = pwdDisplay.textContent;
-      if (pwd && pwd !== 'Generate a password') {
+      if (pwd && pwd !== 'Click generate to create a password') {
         window.open('https://aaks-hath.github.io/Password-Checker/', '_blank');
       }
     });
@@ -626,7 +924,10 @@
     btnGenerate.addEventListener('click', makePassword);
     btnCopy.addEventListener('click', copyPwd);
 
-    window.addEventListener('DOMContentLoaded', makePassword);
+    window.addEventListener('DOMContentLoaded', () => {
+      makePassword();
+      lucide.createIcons();
+    });
   </script>
 </body>
 </html>
