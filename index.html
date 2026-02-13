@@ -39,11 +39,20 @@
         repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,0,0,.02) 35px, rgba(0,0,0,.02) 70px);
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 20px;
       color: var(--text-primary);
       overflow-x: hidden;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     .container {
@@ -636,6 +645,32 @@
       padding: 30px;
     }
 
+    /* Site Footer */
+    .site-footer {
+      width: 100%;
+      background: var(--bg-primary);
+      border-top: 2px solid var(--accent-primary);
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Copyright Footer */
+    .copyright {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
     @media (max-width: 1200px) {
       .container {
         grid-template-columns: 1fr;
@@ -668,6 +703,7 @@
   </style>
 </head>
 <body>
+  <div class="main-wrapper">
   <div class="container">
     <!-- LEFT PANEL: Settings -->
     <div class="panel settings-panel">
@@ -752,6 +788,15 @@
       </div>
     </div>
   </div>
+  </div>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="copyright">
+      © 2026 Aakshat Hariharan. All rights reserved.
+    </div>
+  </div>
+</footer>
 
   <script>
     const pwdDisplay = document.getElementById('passwordText');
